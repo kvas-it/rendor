@@ -33,6 +33,7 @@ setup(
     keywords='static site generator, markdown',
     py_modules=['rendor'],
     install_requires=[
+        'jinja2',
         'markdown',
     ],
     extras_require={
