@@ -1,9 +1,9 @@
 """Install Rendor."""
 
-from setuptools import setup
-
 from io import open
 from os import path
+
+from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
 
@@ -39,6 +39,7 @@ setup(
     extras_require={
         'dev': [
             'flake8',
+            'isort',
             'pytest',
         ],
     },

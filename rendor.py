@@ -10,7 +10,6 @@ from typing import List, Optional
 import jinja2
 import markdown
 
-
 DEFAULT_TEMPLATE = '''\
 <html>
   <head>
