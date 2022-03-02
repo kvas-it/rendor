@@ -20,7 +20,8 @@ DEFAULT_TEMPLATE = '''\
   </body>
 </html>
 '''
-TITLE_RX = re.compile('<h1>(.*)</h1>')
+TITLE_RX = re.compile(r'<h1>(.*)</h1>')
+LINK_RX = re.compile(r'href="([^"]*)\.md', re.IGNORECASE)
 
 
 class TemplateLoader(jinja2.FileSystemLoader):
@@ -65,7 +66,10 @@ def rendor(inputs: List[str], outdir: str, template: Optional[str]):
                     encoding='utf-8',
                     errors='xmlcharrefreplace',
                 ) as out_fp:
-                    rendored = markdown.markdown(in_fp.read())
+                    rendored = LINK_RX.sub(
+                        r'href="\1.html',
+                        markdown.markdown(in_fp.read()),
+                    )
                     if match := TITLE_RX.search(rendored):
                         title = match.group(1)
                     else:
