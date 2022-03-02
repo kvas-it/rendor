@@ -3,14 +3,14 @@ import os
 from rendor import main
 
 
-def expect_html(title):
+def expect_html(title, body):
     return f'''\
 <html>
   <head>
     <title>{title}</title>
   </head>
   <body>
-<h1>{title}</h1>
+{body}
   </body>
 </html>'''
 
@@ -22,7 +22,7 @@ def test_one_page(tmpdir):
     outdir = tmpdir.join('html')
     main([str(infile)])
     outfile = outdir.join('index.html')
-    assert outfile.read() == expect_html('Foo')
+    assert outfile.read() == expect_html('Foo', '<h1>Foo</h1>')
 
 
 def test_static(tmpdir):
@@ -66,6 +66,6 @@ def test_subdirs(tmpdir):
     outdir = tmpdir.join('html')
     main([str(in1), str(in2)])
     out1 = outdir.join('foo', 'index.html')
-    assert out1.read() == expect_html('Foo')
+    assert out1.read() == expect_html('Foo', '<h1>Foo</h1>')
     out2 = outdir.join('bar', 'index.html')
     assert out2.read() == 'Bar'
