@@ -15,6 +15,7 @@ def expect_html(title, body):
     return f'''\
 <html>
   <head>
+    <meta charset="utf-8">
     <title>{title}</title>
   </head>
   <body>

@@ -13,6 +13,7 @@ import markdown
 DEFAULT_TEMPLATE = '''\
 <html>
   <head>
+    <meta charset="utf-8">
     <title>{{ title }}</title>
   </head>
   <body>
@@ -92,7 +93,7 @@ def rendor(inputs: List[str], outdir: str, template: Optional[str]):
 
 def main(args=None):
     """CLI."""
-    args = args or sys.argv
+    args = args or sys.argv[1:]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('inputs', nargs='+', help='Input files')
     parser.add_argument(
@@ -107,8 +108,8 @@ def main(args=None):
         default=None,
         help='Page template (Jinja2)',
     )
-    args = parser.parse_args(args)
-    rendor(args.inputs, outdir=args.outdir, template=args.template)
+    pargs = parser.parse_args(args)
+    rendor(pargs.inputs, outdir=pargs.outdir, template=pargs.template)
 
 
 if __name__ == '__main__':
