@@ -83,3 +83,15 @@ def test_subdirs(srcdir):
     assert out1.read() == expect_html('Foo', '<h1>Foo</h1>')
     out2 = outdir.join('bar', 'index.html')
     assert out2.read() == 'Bar'
+
+
+def test_extension(srcdir):
+    # We employ a shortcut here: check that whatever we pass via -x gets to
+    # markdown.markdown() and that it tries to import it. The rest should be
+    # done by the markdown engine, which we assume works.
+    infile = srcdir.join('index.md')
+    infile.write('# Foo')
+    with pytest.raises(ModuleNotFoundError) as err:
+        main(['-x', 'foo_bar', str(infile)])
+    assert err.type == ModuleNotFoundError
+    assert str(err.value) == "No module named 'foo_bar'"

@@ -43,7 +43,12 @@ class TemplateLoader(jinja2.FileSystemLoader):
         return super().get_source(environment, template)
 
 
-def rendor(inputs: List[str], outdir: str, template: Optional[str]):
+def rendor(
+    inputs: List[str],
+    outdir: str,
+    template: Optional[str],
+    extensions: List[str],
+):
     """Render all `inputs` to `outdir`."""
     if template is not None:
         template = os.path.relpath(template)
@@ -69,7 +74,7 @@ def rendor(inputs: List[str], outdir: str, template: Optional[str]):
                 ) as out_fp:
                     rendored = LINK_RX.sub(
                         r'href="\1.html',
-                        markdown.markdown(in_fp.read()),
+                        markdown.markdown(in_fp.read(), extensions=extensions),
                     )
                     if match := TITLE_RX.search(rendored):
                         title = match.group(1)
@@ -108,8 +113,20 @@ def main(args=None):
         default=None,
         help='Page template (Jinja2)',
     )
+    parser.add_argument(
+        '--extension',
+        '-x',
+        default=[],
+        action='append',
+        help='Python-Markdown extension to use (can be given multiple times)',
+    )
     pargs = parser.parse_args(args)
-    rendor(pargs.inputs, outdir=pargs.outdir, template=pargs.template)
+    rendor(
+        pargs.inputs,
+        outdir=pargs.outdir,
+        template=pargs.template,
+        extensions=pargs.extension,
+    )
 
 
 if __name__ == '__main__':
